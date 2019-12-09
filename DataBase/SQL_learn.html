@@ -264,9 +264,13 @@ hr {
 
 /* TABLES
 =============================================================================*/
+table{
+  border-collapse: collapse;
+}
 
 table th {
   font-weight: bold;
+  background-color:#dcdcdc;
 }
 
 table th, table td {
@@ -290,185 +294,292 @@ img {
   max-width: 100%
 }
 </style>
-<script type = "text/javascript" > 
-//create content
-document.addEventListener("DOMContentLoaded", function()
-{
-    toTop();//置顶
+<script type="text/javascript">
+    function wrapOldContentByDiv() {
+        var oldContentDiv = document.createElement("div");
+        oldContentDiv.style.cssText = "float:right; width:72%; padding-left: 3%; padding-right:3%;border: 2px solid #CACACA;";
+        oldContentDiv.innerHTML = document.body.innerHTML;
+        document.body.style["max-width"] = "100%";
+        document.body.style["margin"] = "20px";
+        document.body.style["padding"] = "0";
+        document.body.innerHTML = '';
+        document.body.appendChild(oldContentDiv);
+    };
 
-    var div1            = document.createElement("div");
-    div1.style.cssText  = "clear:both";
+    function addDirectorySwitch(directoryDiv) {
+        var directorySwitchP = document.createElement("p");
+        directorySwitchP.style.cssText = "text-align: left; margin: 0;";
+        directoryDiv.appendChild(directorySwitchP);
 
-    // create TOC list
-    var outline         = document.createElement("div");
-    outline.setAttribute("id", "outline-list");
-    outline.style.cssText = "border:solid 1px #ccc; background:#eee; min-width:200px;padding:4px 10px;";
+        var ele_span = document.createElement("span");
+        ele_span.style.cssText = "font-weight: 1000;";
+        var ele_text = document.createTextNode("目录");
+        ele_span.appendChild(ele_text);
 
-    var ele_p           = document.createElement("p");
-    ele_p.style.cssText = "text-align: left; margin: 0;";
-    outline.appendChild(ele_p);
+        var ele_a = document.createElement("a");
+        ele_a.appendChild(document.createTextNode("[-]"));
+        ele_a.setAttribute("href", "#");
+        ele_a.setAttribute("onclick", "javascript:return switchAllDirectory(this);");
+        ele_a.setAttribute("title", "Click to Open TOC");
 
-    var ele_span        = document.createElement("span");
+        ele_span.appendChild(ele_a);
+        directorySwitchP.appendChild(ele_span);
+    }
 
-    // ele_span.style.cssText = "float: left;";
-    var ele_text        = document.createTextNode("目录");
-    ele_span.appendChild(ele_text);
-
-    var ele_a           = document.createElement("a");
-    ele_a.appendChild(document.createTextNode("[+]"));
-    ele_a.setAttribute("href", "#");
-    ele_a.setAttribute("onclick", "javascript:return openct(this);");
-    ele_a.setAttribute("title", "Click to Open 目录");
-
-    ele_span.appendChild(ele_a);
-    ele_p.appendChild(ele_span);
-
-    var ul_top          = document.createElement("ul"); // 顶级
-    ul_top.style.cssText = "display:none;margin-left:14px;padding-left:14px;line-height:160%;";
-    ul_top.setAttribute("id", "outline_ol");
-    outline.appendChild(ul_top);
-    var div1            = document.createElement("div");
-    div1.style.cssText  = "clear:both";
-
-    document.body.insertBefore(outline, document.body.childNodes[0]);
-
-    // get all the headlines
-    var headers         = document.querySelectorAll('h1,h2,h3,h4,h5,h6');
-
-    if (headers.length < 2)
-        return;
-
-
-    var old_h = 1;
-
-    var ul_array = new Array(7);
-    var ul_current = null;
-    ul_array[1] = ul_top;
-
-    for (var i = 0; i < headers.length; i++)
-    {
-        // get H* and prepare for the ordered list 
-        var header = headers[i];
-
-        //header.setAttribute("id", "t" + i + header.tagName);
-        header.setAttribute("id", header.textContent);
-        var h = parseInt(header.tagName.substr(1), 10);
-
-        // assert  1<=h && h <= 6
-
-        ul_current = 0;
-        if (h < old_h)
-        {
-            for (var j = h+1; j <= 6; j++)
-            {
-                ul_array[j] = null;
-            }
-            ul_current = h;
-        }
-        else if (h == old_h)
-        {
-            ul_current = h;
-        }
-        else if (h > old_h)
-        {
-            ul_current = old_h + 1; /* 是old_h + 1的原因： h如果是old_h + 2 或者 + 3时，
-                                        我们依然按 + 1来做 */
+    function createTree(parentNode, tags, index, maxLevel) {
+        if (index >= tags.length) {
+            return -1;
         }
 
-        if (ul_array[ul_current] == null)
-        {
-            ul_array[ul_current] = document.createElement("ul");
-            if (h>1)
-            {
-                ul_array[h-1].lastChild.appendChild(ul_array[ul_current]);
+        var lastLevel = -1;
+        for (var i = index; i < tags.length; i++) {
+            var header = tags[i];
+            var level = parseInt(header.tagName.substr(1), 10);
+
+            var childNode = {'tag': header, 'childNodes': [], 'level': level};
+            if (level > parentNode.level) {
+                if (lastLevel > 0 && level > lastLevel) {
+                    // 子子类
+                    index = createTree(parentNode.childNodes[parentNode.childNodes.length - 1], tags, i);
+                    if (index < 0) {
+                        return -1;
+                    } else {
+                        i = index - 1;
+                    }
+                } else {
+                    parentNode.childNodes.push(childNode);
+                    lastLevel = level;
+                }
+            } else if (level <= maxLevel && parentNode.level > maxLevel) {
+                parentNode.childNodes.push(childNode);
+                lastLevel = level;
+            } else {
+                return i;
             }
         }
+    }
 
-        var elem_li = document.createElement("li");
-        ul_array[ul_current].appendChild(elem_li);
-
+    function createAElement(tag, index) {
         var a = document.createElement("a");
-
-        // set href for the TOC item 
-        //a.setAttribute("href", "#t" + i + header.tagName);
-        a.setAttribute("href", "#" + header.textContent);
-
-        // TOC item text
-        //a.innerHTML  = "h" + h + header.textContent;
-        a.innerHTML  = header.textContent;
-
-
-        elem_li.appendChild(a);
-
-        old_h = h;
+        a.style.cssText = "";
+        a.setAttribute("href", "#" + tag.textContent);
+        a.innerHTML = index.toString() + tag.textContent;
+        return a;
     }
-});
-function toTop(){
-    var toTop           = document.createElement("div");
-    toTop.style.cssText = "position:fixed;bottom:10px;right:10px;width:20x;height:20px;background:gray;padding:5px;";
-    toTop.innerHTML="^"
-    toTop.setAttribute("id", "toTop");
-    toTop.setAttribute("title", "to top");
-    document.body.insertBefore(toTop, document.body.childNodes[0]);
 
-    // 获取置顶对象
-    var obj = document.getElementById('toTop');
+    function createOlElement() {
+        var ol_el = document.createElement("ol");
+        ol_el.style["line-height"] = "180%";
+        ol_el.style["list-style-type"] = "none";
+        ol_el.style["margin-left"] = "0";
+        return ol_el
+    }
 
-    // 置顶对象点击事件
-    obj.onclick = function() {
-        var timer = setInterval(function() {
-            window.scrollBy(0, -500);
-            if(document.documentElement && document.documentElement.scrollTop) //IE
-            {
-                if(document.documentElement.scrollTop<=0){
-                    clearInterval(timer);
-                }else{
-                    window.scrollBy(0,-500);
-                }
-            }else{ //Chrome不支持documentElement.scrollTop
-                if(document.body.scrollTop<=0){
-                    clearInterval(timer);
-                }else{
-                    window.scrollBy(0,-500);
-                }
-                if (document.body.scrollTop == 0) {
-                    clearInterval(timer);
-                };
+    function createEmptyLiElement() {
+        var emptyLiEle = document.createElement("li");
+        return emptyLiEle
+    }
+
+    function getIndex(parentDirectory, directoryLevel, index) {
+        if (directoryLevel === 0) {
+            return parentDirectory + (index + 1).toString() + "."
+        } else {
+            return parentDirectory + (index + 1).toString() + ".";
+        }
+    }
+
+    function createLeafElement(node, curDirectory) {
+        var liEle = createEmptyLiElement();
+        var aEle = createAElement(node.tag, curDirectory);
+        liEle.appendChild(aEle);
+        return liEle
+    }
+
+    function getArrowDownStyle() {
+        return " width: 0;" +
+            "    height: 0;" +
+            "    position: relative;" +
+            "    margin-right: 8px;" +
+            "    top: 3px;" +
+            "    display: inline-block;" +
+            "    border: 6px outset;" +
+            "    border-color: black transparent transparent transparent;"
+    }
+
+    function getArrowRightStyle() {
+        return " width: 0;" +
+            "    height: 0;" +
+            "    left: 5px;" +
+            "    position: relative;" +
+            "    margin-right: 8px;" +
+            "    display: inline-block;" +
+            "    border: 6px solid;" +
+            "    border-color: transparent transparent transparent black;"
+    }
+
+    /*
+    <ol>
+        <li><a>根节点1</a></li>
+        <li><a>根节点2</a></li>
+        <li>
+            <div>
+                <a><span>[-]</span>根节点3</a>
+                <ol>
+                    <li><a>子节点1</a></li>
+                    <li><a>子节点2</a></li>
+                    <li><a>子节点3</a></li>
+                </ol>
+            </div>
+        </li>
+        <li><a>根节点4</a></li>
+     </ol>
+    * */
+    // node, 1.2.3 4 0
+    function renderTree(node, parentDirectory, directoryLevel, index) {
+        var childNodes = node.childNodes;
+        var tagContent = node.tag.textContent;
+
+        node.tag.setAttribute("id", tagContent);
+
+        var curDirectory = getIndex(parentDirectory, directoryLevel, index);
+        var directoryName = curDirectory + "&nbsp;" + tagContent;
+
+        // 叶子节点
+        if (childNodes.length === 0) {
+            return "<li style='padding-left: 24px;'><a href='#" + tagContent + "'>" + directoryName + "</a></li>"
+    //                return createLeafElement(node, curDirectory)
+        }
+
+        // 非叶子节点
+        var childContent = "";
+        for (var j = 0; j < node.childNodes.length; j++) {
+            childContent += renderTree(node.childNodes[j], curDirectory, directoryLevel + 1, j);
+        }
+
+        return "<li>" +
+            "   <div>" +
+            "      <div>" +
+            "         <div id='" + directoryName + "' class='open' style='" + getArrowDownStyle() + "' onclick='return switchDirectory(this);'></div>" +
+            "         <a href='#" + tagContent + "' ondblclick='return switchByDbClick(this);'>" + directoryName + "</a>" +
+            "      </div>" +
+            "      <ol id='ol-" + directoryName + "' style='line-height: 180%;list-style-type: none; padding-left: 20px;'>" + childContent + "</ol>" +
+            "   </div>" +
+            "</li>";
+
+        /*var liEle = createEmptyLiElement();
+        var aEle = createAElement(node.tag, curDirectory);
+
+        var parentElement = document.createElement("div");
+        parentElement.appendChild(aEle);
+
+        var olElement = createOlElement();
+
+        var tempNode;
+        for (var j = 0; j < node.childNodes.length; j++) {
+            tempNode = node.childNodes[j];
+            var element = renderTree(tempNode, curDirectory, directoryLevel + 1, j);
+            olElement.appendChild(element);
+        }
+        parentElement.appendChild(olElement);
+
+        liEle.appendChild(parentElement);
+        return liEle;*/
+    }
+
+    function switchByDbClick(aEle) {
+        switchDirectory(aEle.parentElement().firstChild)
+    }
+
+    // 开关目录
+    function switchDirectory(ele) {
+        var divEle = ele.parentNode.parentNode;
+        var olEle = divEle.lastElementChild;
+        if (ele.className === "open") {
+            // 关闭
+            olEle.style.cssText = "display:none;line-height: 180%;list-style-type: none; padding-left: 20px";
+            ele.setAttribute("class", "close");
+            ele.style.cssText = getArrowRightStyle();
+        } else if (ele.className === "close") {
+            // 打开
+            olEle.style.cssText = "line-height: 180%;list-style-type: none; padding-left: 20px";
+            ele.setAttribute("class", "open");
+            ele.style.cssText = getArrowDownStyle();
+        }
+    }
+
+    function switchAllDirectory(e) {
+        var rootOlElement = document.getElementById("outline_ol");
+        var ols = rootOlElement.getElementsByTagName("ol");
+        var isOpen = false;
+
+        if (e.innerHTML === '[+]') {
+            e.setAttribute('title', 'collapse');
+            e.innerHTML = '[-]';
+            isOpen = true;
+        } else {
+            e.setAttribute('title', 'expand');
+            e.innerHTML = '[+]';
+        }
+
+
+        for (var i = 0; i < ols.length; i++) {
+            var olEle = ols[i];
+            if (isOpen) {
+                olEle.style.display = "block";
+                olEle.parentNode.firstElementChild.firstElementChild.style.cssText = getArrowDownStyle();
+            } else {
+                olEle.style.display = "none";
+                olEle.parentNode.firstElementChild.firstElementChild.style.cssText = getArrowRightStyle();
             }
-        }, 2);
+        }
+
+        e.blur();
+        return false;
     }
 
-    // 窗口滚动检测
-    //window.onscroll = function() {
-    //    obj.style.display = (document.body.scrollTop >= 300) ? "block" : "none";
-    //}
-}
-// 
-function openct(e)
-{
-    if (e.innerHTML == '[+]')
-    {
-        // createTextNode
-        e.setAttribute('title', 'collapse');
-        e.innerHTML         = '[-]';
-        var             element = document.getElementById("outline_ol");
+    document.addEventListener("DOMContentLoaded", function () {
+        // 1, 将body内容提取到div标签中
+        wrapOldContentByDiv();
 
-        element.style.cssText = "margin-left:14px;padding-left:14px;line-height:160%;";
-    }
-    else 
-    {
-        e.setAttribute('title', 'expand');
-        e.innerHTML         = '[+]';
-        var             element = document.getElementById("outline_ol");
+        // 2, 创建左边目录列表Div
+        var directoryDiv = document.createElement("div");
+        directoryDiv.setAttribute("id", "outline-list");
+        directoryDiv.style.cssText = "width:20%;height:100%; float:left;font-size:16px,z-index:1;position: fixed;overflow: hidden;";
 
-        element.style.cssText = "display:none;margin-left:14px;padding-left:14px;line-height:160%;";
-    }
+        // 3, 目录展开折叠开关
+        addDirectorySwitch(directoryDiv);
 
-    e.blur();
-    return false;
-}
+        // 4, 创建目录列表
+        var directoryOl = document.createElement("ol");
+        directoryOl.style.cssText = "padding-left:14px;line-height:180%;list-style-type:none;height: 85%;padding-bottom: 30px; overflow: auto;";
+        directoryOl.setAttribute("id", "outline_ol");
+        directoryDiv.appendChild(directoryOl);
+        var div1 = document.createElement("div");
+        div1.style.cssText = "clear:both";
 
+        // 插入目录
+        document.body.insertBefore(directoryDiv, document.body.childNodes[0]);
 
+        // 5, 获取所有的H标签
+        var hTags = document.querySelectorAll('h1,h2,h3,h4,h5,h6');
+        if (hTags.length < 2)
+            return;
+
+        var rootNode = {'tag': directoryOl, 'childNodes': [], 'level': 0};
+        var maxLevel = parseInt(hTags[0].tagName.substr(1), 10);
+        // 6, 创建树形结构
+        createTree(rootNode, hTags, 0, maxLevel);
+
+        // 7, 绘制树结构
+        var htmlContent = "";
+        for (var j = 0; j < rootNode.childNodes.length; j++) {
+    //                var element = renderTree(rootNode.childNodes[j], '', 1, j);
+    //                directoryOl.appendChild(element);
+
+            htmlContent += renderTree(rootNode.childNodes[j], '', 1, j);
+        }
+        directoryOl.innerHTML = htmlContent;
+    });
 </script>
 </head>
 <body>
