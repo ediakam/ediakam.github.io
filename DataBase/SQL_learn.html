@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>SQL_learn</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<style type="text/css">
+/* GitHub stylesheet for MarkdownPad (http://markdownpad.com) */
+/* Author: Nicolas Hery - http://nicolashery.com */
+/* Version: b13fe65ca28d2e568c6ed5d7f06581183df8f2ff */
+/* Source: https://github.com/nicolahery/markdownpad-github */
+
+/* RESET
+=============================================================================*/
+
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed, figure, figcaption, footer, header, hgroup, menu, nav, output, ruby, section, summary, time, mark, audio, video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+/* BODY
+=============================================================================*/
+
+body {
+  font-family: Helvetica, arial, freesans, clean, sans-serif;
+  font-size: 14px;
+  line-height: 1.6;
+  color: #333;
+  background-color: #fff;
+  padding: 20px;
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+body>*:first-child {
+  margin-top: 0 !important;
+}
+
+body>*:last-child {
+  margin-bottom: 0 !important;
+}
+
+/* BLOCKS
+=============================================================================*/
+
+p, blockquote, ul, ol, dl, table, pre {
+  margin: 15px 0;
+}
+
+/* HEADERS
+=============================================================================*/
+
+h1, h2, h3, h4, h5, h6 {
+  margin: 20px 0 10px;
+  padding: 0;
+  font-weight: bold;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1 tt, h1 code, h2 tt, h2 code, h3 tt, h3 code, h4 tt, h4 code, h5 tt, h5 code, h6 tt, h6 code {
+  font-size: inherit;
+}
+
+h1 {
+  font-size: 28px;
+  color: #000;
+}
+
+h2 {
+  font-size: 24px;
+  /*border-bottom: 1px solid #ccc;*/
+  color: #000;
+}
+
+h3 {
+  font-size: 18px;
+}
+
+h4 {
+  font-size: 16px;
+  color:#808a87;
+}
+
+h5 {
+  font-size: 14px;
+}
+
+h6 {
+  color: #777;
+  font-size: 14px;
+}
+
+body>h2:first-child, body>h1:first-child, body>h1:first-child+h2, body>h3:first-child, body>h4:first-child, body>h5:first-child, body>h6:first-child {
+  margin-top: 0;
+  padding-top: 0;
+}
+
+a:first-child h1, a:first-child h2, a:first-child h3, a:first-child h4, a:first-child h5, a:first-child h6 {
+  margin-top: 0;
+  padding-top: 0;
+}
+
+h1+p, h2+p, h3+p, h4+p, h5+p, h6+p {
+  margin-top: 10px;
+}
+
+/* LINKS
+=============================================================================*/
+
+a {
+  color: #4183C4;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* LISTS
+=============================================================================*/
+
+ul, ol {
+  padding-left: 30px;
+}
+
+ul li > :first-child, 
+ol li > :first-child, 
+ul li ul:first-of-type, 
+ol li ol:first-of-type, 
+ul li ol:first-of-type, 
+ol li ul:first-of-type {
+  margin-top: 0px;
+}
+
+ul ul, ul ol, ol ol, ol ul {
+  margin-bottom: 0;
+}
+
+dl {
+  padding: 0;
+}
+
+dl dt {
+  font-size: 14px;
+  font-weight: bold;
+  font-style: italic;
+  padding: 0;
+  margin: 15px 0 5px;
+}
+
+dl dt:first-child {
+  padding: 0;
+}
+
+dl dt>:first-child {
+  margin-top: 0px;
+}
+
+dl dt>:last-child {
+  margin-bottom: 0px;
+}
+
+dl dd {
+  margin: 0 0 15px;
+  padding: 0 15px;
+}
+
+dl dd>:first-child {
+  margin-top: 0px;
+}
+
+dl dd>:last-child {
+  margin-bottom: 0px;
+}
+
+/* CODE
+=============================================================================*/
+
+pre, code, tt {
+  font-size: 12px;
+  font-family: Consolas, "Liberation Mono", Courier, monospace;
+}
+
+code, tt {
+  margin: 0 0px;
+  padding: 0px 0px;
+  white-space: nowrap;
+  border: 1px solid #eaeaea;
+  background-color: #f8f8f8;
+  border-radius: 3px;
+}
+
+pre>code {
+  margin: 0;
+  padding: 0;
+  white-space: pre;
+  border: none;
+  background: transparent;
+}
+
+pre {
+  background-color: #f8f8f8;
+  border: 1px solid #ccc;
+  font-size: 13px;
+  line-height: 19px;
+  overflow: auto;
+  padding: 6px 10px;
+  border-radius: 3px;
+}
+
+pre code, pre tt {
+  background-color: transparent;
+  border: none;
+}
+
+kbd {
+    -moz-border-bottom-colors: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    background-color: #DDDDDD;
+    background-image: linear-gradient(#F1F1F1, #DDDDDD);
+    background-repeat: repeat-x;
+    border-color: #DDDDDD #CCCCCC #CCCCCC #DDDDDD;
+    border-image: none;
+    border-radius: 2px 2px 2px 2px;
+    border-style: solid;
+    border-width: 1px;
+    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+    line-height: 10px;
+    padding: 1px 4px;
+}
+
+/* QUOTES
+=============================================================================*/
+
+blockquote {
+  border-left: 4px solid #DDD;
+  padding: 0 15px;
+  color: #777;
+}
+
+blockquote>:first-child {
+  margin-top: 0px;
+}
+
+blockquote>:last-child {
+  margin-bottom: 0px;
+}
+
+/* HORIZONTAL RULES
+=============================================================================*/
+
+hr {
+  clear: both;
+  margin: 15px 0;
+  height: 0px;
+  overflow: hidden;
+  border: none;
+  background: transparent;
+  border-bottom: 4px solid #ddd;
+  padding: 0;
+}
+
+/* TABLES
+=============================================================================*/
+
+table th {
+  font-weight: bold;
+}
+
+table th, table td {
+  border: 1px solid #ccc;
+  padding: 6px 13px;
+}
+
+table tr {
+  border-top: 1px solid #ccc;
+  background-color: #fff;
+}
+
+table tr:nth-child(2n) {
+  background-color: #f8f8f8;
+}
+
+/* IMAGES
+=============================================================================*/
+
+img {
+  max-width: 100%
+}
+</style>
+<script type = "text/javascript" > 
+//create content
+document.addEventListener("DOMContentLoaded", function()
+{
+    toTop();//置顶
+
+    var div1            = document.createElement("div");
+    div1.style.cssText  = "clear:both";
+
+    // create TOC list
+    var outline         = document.createElement("div");
+    outline.setAttribute("id", "outline-list");
+    outline.style.cssText = "border:solid 1px #ccc; background:#eee; min-width:200px;padding:4px 10px;";
+
+    var ele_p           = document.createElement("p");
+    ele_p.style.cssText = "text-align: left; margin: 0;";
+    outline.appendChild(ele_p);
+
+    var ele_span        = document.createElement("span");
+
+    // ele_span.style.cssText = "float: left;";
+    var ele_text        = document.createTextNode("目录");
+    ele_span.appendChild(ele_text);
+
+    var ele_a           = document.createElement("a");
+    ele_a.appendChild(document.createTextNode("[+]"));
+    ele_a.setAttribute("href", "#");
+    ele_a.setAttribute("onclick", "javascript:return openct(this);");
+    ele_a.setAttribute("title", "Click to Open 目录");
+
+    ele_span.appendChild(ele_a);
+    ele_p.appendChild(ele_span);
+
+    var ul_top          = document.createElement("ul"); // 顶级
+    ul_top.style.cssText = "display:none;margin-left:14px;padding-left:14px;line-height:160%;";
+    ul_top.setAttribute("id", "outline_ol");
+    outline.appendChild(ul_top);
+    var div1            = document.createElement("div");
+    div1.style.cssText  = "clear:both";
+
+    document.body.insertBefore(outline, document.body.childNodes[0]);
+
+    // get all the headlines
+    var headers         = document.querySelectorAll('h1,h2,h3,h4,h5,h6');
+
+    if (headers.length < 2)
+        return;
+
+
+    var old_h = 1;
+
+    var ul_array = new Array(7);
+    var ul_current = null;
+    ul_array[1] = ul_top;
+
+    for (var i = 0; i < headers.length; i++)
+    {
+        // get H* and prepare for the ordered list 
+        var header = headers[i];
+
+        //header.setAttribute("id", "t" + i + header.tagName);
+        header.setAttribute("id", header.textContent);
+        var h = parseInt(header.tagName.substr(1), 10);
+
+        // assert  1<=h && h <= 6
+
+        ul_current = 0;
+        if (h < old_h)
+        {
+            for (var j = h+1; j <= 6; j++)
+            {
+                ul_array[j] = null;
+            }
+            ul_current = h;
+        }
+        else if (h == old_h)
+        {
+            ul_current = h;
+        }
+        else if (h > old_h)
+        {
+            ul_current = old_h + 1; /* 是old_h + 1的原因： h如果是old_h + 2 或者 + 3时，
+                                        我们依然按 + 1来做 */
+        }
+
+        if (ul_array[ul_current] == null)
+        {
+            ul_array[ul_current] = document.createElement("ul");
+            if (h>1)
+            {
+                ul_array[h-1].lastChild.appendChild(ul_array[ul_current]);
+            }
+        }
+
+        var elem_li = document.createElement("li");
+        ul_array[ul_current].appendChild(elem_li);
+
+        var a = document.createElement("a");
+
+        // set href for the TOC item 
+        //a.setAttribute("href", "#t" + i + header.tagName);
+        a.setAttribute("href", "#" + header.textContent);
+
+        // TOC item text
+        //a.innerHTML  = "h" + h + header.textContent;
+        a.innerHTML  = header.textContent;
+
+
+        elem_li.appendChild(a);
+
+        old_h = h;
+    }
+});
+function toTop(){
+    var toTop           = document.createElement("div");
+    toTop.style.cssText = "position:fixed;bottom:10px;right:10px;width:20x;height:20px;background:gray;padding:5px;";
+    toTop.innerHTML="^"
+    toTop.setAttribute("id", "toTop");
+    toTop.setAttribute("title", "to top");
+    document.body.insertBefore(toTop, document.body.childNodes[0]);
+
+    // 获取置顶对象
+    var obj = document.getElementById('toTop');
+
+    // 置顶对象点击事件
+    obj.onclick = function() {
+        var timer = setInterval(function() {
+            window.scrollBy(0, -500);
+            if(document.documentElement && document.documentElement.scrollTop) //IE
+            {
+                if(document.documentElement.scrollTop<=0){
+                    clearInterval(timer);
+                }else{
+                    window.scrollBy(0,-500);
+                }
+            }else{ //Chrome不支持documentElement.scrollTop
+                if(document.body.scrollTop<=0){
+                    clearInterval(timer);
+                }else{
+                    window.scrollBy(0,-500);
+                }
+                if (document.body.scrollTop == 0) {
+                    clearInterval(timer);
+                };
+            }
+        }, 2);
+    }
+
+    // 窗口滚动检测
+    //window.onscroll = function() {
+    //    obj.style.display = (document.body.scrollTop >= 300) ? "block" : "none";
+    //}
+}
+// 
+function openct(e)
+{
+    if (e.innerHTML == '[+]')
+    {
+        // createTextNode
+        e.setAttribute('title', 'collapse');
+        e.innerHTML         = '[-]';
+        var             element = document.getElementById("outline_ol");
+
+        element.style.cssText = "margin-left:14px;padding-left:14px;line-height:160%;";
+    }
+    else 
+    {
+        e.setAttribute('title', 'expand');
+        e.innerHTML         = '[+]';
+        var             element = document.getElementById("outline_ol");
+
+        element.style.cssText = "display:none;margin-left:14px;padding-left:14px;line-height:160%;";
+    }
+
+    e.blur();
+    return false;
+}
+
+
+</script>
+</head>
+<body>
+<h4>插入数据：INSERT INTO 语句</h4>
+<p><strong>1.插入所有字段：</strong>    </p>
+<pre><code>INSERT INTO 表名 VALUES（字段1值，字段2值...）
+</code></pre>
+
+<p><strong>2. 插入指定字段：</strong></p>
+<pre><code>INSERT INTO 表名(字段1，字段2...) VALUES (字段1值，字段2值...)
+</code></pre>
+
+<p><strong>3. 插入多行数据：</strong></p>
+<pre><code>INSERT INTO 表名 VALUES(字段1值，字段2值..),(字段1值，字段2值..)
+</code></pre>
+
+<h4>删除数据：DELETE</h4>
+<p><strong>1. 删除某行数据：</strong></p>
+<pre><code>DELETE FROM 表名 WHERE 字段名=值（条件）
+</code></pre>
+
+<p><strong>2. 删除整个表的数据：</strong></p>
+<p>清空数据表内容，不释放空间，即：下次插入表数据，自动递增值的字段依然接着删除数据继续增加</p>
+<pre><code>DELETE FROM 表名
+或 DELETE * FROM 表名
+</code></pre>
+
+<h4>清空表数据：TRUNCATE</h4>
+<p>TRUNCATE 清空表数据，释放空间，即：下次插入表数据，自动递增值的字段重新开始）</p>
+<pre><code>TRUNCATE TABLE 表名
+</code></pre>
+
+<h4>修改数据：UPDATE</h4>
+<p><strong>1. 更改某行数据的某个字段：</strong></p>
+<pre><code>UPDATE 表名 SET 字段名 = 新值 WHERE 字段名 = 值（条件）
+</code></pre>
+
+<p><strong>2. 更改某行数据的多个字段：</strong></p>
+<pre><code>UPDATE 表名 SET 字段1 = 新值,字段2 = 新值 WHERE 字段名 =值（条件）
+</code></pre>
+
+<h4>查询数据：SELECT</h4>
+<p><strong>1. 查询所有列：</strong></p>
+<pre><code>SELECT * FROM 表名
+</code></pre>
+
+<p><strong>2. 查询某一列：</strong></p>
+<pre><code>SELECT 字段1,字段2 FROM 表名
+</code></pre>
+
+<p><strong>3. 根据条件查询数据：</strong></p>
+<pre><code>SELECT * FROM 表名 WHERE 字段 运算符 值
+</code></pre>
+
+<p>在 WHERE 语句中使用的运算符：</p>
+<table>
+<thead>
+<tr>
+	<th align="left">运算符</th>
+	<th align="left">描述</th>
+	<th align="left">备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+	<td align="left">=</td>
+	<td align="left">等于</td>
+	<td align="left"></td>
+</tr>
+<tr>
+	<td align="left">&lt;&gt; 或 !=</td>
+	<td align="left">不等于</td>
+	<td align="left"></td>
+</tr>
+<tr>
+	<td align="left">&gt;</td>
+	<td align="left">大于</td>
+	<td align="left"></td>
+</tr>
+<tr>
+	<td align="left">&lt;</td>
+	<td align="left">小于</td>
+	<td align="left"></td>
+</tr>
+<tr>
+	<td align="left">&gt;=</td>
+	<td align="left">大于等于</td>
+	<td align="left"></td>
+</tr>
+<tr>
+	<td align="left">&lt;=</td>
+	<td align="left">小于等于</td>
+	<td align="left"></td>
+</tr>
+<tr>
+	<td align="left">BETWEEN</td>
+	<td align="left">在某个范围内</td>
+	<td align="left">BETWEEN 10 and 50（≥10且≤50）</td>
+</tr>
+<tr>
+	<td align="left">IN</td>
+	<td align="left">在某集合内</td>
+	<td align="left">IN (3763,1057) （3763或1057）</td>
+</tr>
+<tr>
+	<td align="left">LIKE</td>
+	<td align="left">搜索某种模式</td>
+	<td align="left">% 通配任意字符，_通配单一字符</td>
+</tr>
+<tr>
+	<td align="left">NOT 或 !</td>
+	<td align="left">逻辑非</td>
+	<td align="left">NOT IN 不在某个合集内</td>
+</tr>
+<tr>
+	<td align="left">OR 或 &amp;#124</td>
+	<td align="left">逻辑或</td>
+	<td align="left">使用多个OR或AND时，使用括号以免计算出错</td>
+</tr>
+<tr>
+	<td align="left">AND或 &amp;&amp;</td>
+	<td align="left">逻辑与</td>
+	<td align="left"></td>
+</tr>
+</tbody>
+</table>
+<p><strong>4. 去重查询：</strong></p>
+<p>DISTINCT 用于返回不同的值，去掉重复的值</p>
+<pre><code>SELECT DISTINCT 字段名 FROM 表名
+</code></pre>
+
+<p><strong>5. 查询结果排序显示：ORDER BY</strong></p>
+<p>默认升序，降序则使用 DESC</p>
+<ul>
+<li>
+<p>升序</p>
+<p><code>SELECT * FROM 表名 ORDER BY 字段名</code></p>
+</li>
+<li>
+<p>多个字段排序时，用逗号，隔开</p>
+<p><code>SELECT * FROM 表名 ORDER BY 字段1,字段2</code></p>
+</li>
+<li>
+<p>降序</p>
+<p><code>SELECT * FROM 表名 ORDER BY 字段 DESC</code></p>
+</li>
+<li>
+<p>升序降序混合使用</p>
+<p><code>SELECT * FROM 表名 ORDER BY 字段1 DESC,字段2 ASC</code></p>
+</li>
+</ul>
+<p><strong>6. 统计查询：</strong></p>
+<ul>
+<li>
+<p>COUNT() 计算行数</p>
+<p><code>SELECT COUNT(*) FROM 表名</code></p>
+</li>
+<li>
+<p>AVG() 求平均函数</p>
+<p><code>SELECT AVG(字段名) FROM 表名</code></p>
+</li>
+<li>
+<p>SUM() 求总和</p>
+<p><code>SELECT SUM(字段名) FROM 表名</code></p>
+</li>
+<li>
+<p>MIN() 求最小</p>
+<p><code>SELECT MIN(字段名) FROM 表名</code></p>
+</li>
+<li>
+<p>MAX() 求最大</p>
+<p><code>SELECT MAX(字段名) FROM 表名</code></p>
+</li>
+<li>
+<p>分组查询 GROUP BY</p>
+<p><code>SELECT SUM(字段) FROM 表名 GROUP BY 分组字段</code></p>
+</li>
+</ul>
+<p>实例：SELECT subscription_id,SUM(pay_price) FROM orders GROUP BY subscription_id</p>
+<p>注：查询每种类型的订阅价格总和</p>
+<p>转自：<a href="https://www.jianshu.com/p/8796188a79ef">https://www.jianshu.com/p/8796188a79ef</a></p>
+
+</body>
+</html>
+<!-- This document was created with MarkdownPad, the Markdown editor for Windows (http://markdownpad.com) -->
