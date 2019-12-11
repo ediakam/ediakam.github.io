@@ -691,6 +691,19 @@ mysql -u root@localhost  (没有密码的情况)
 </code></pre>
 
 <p>-d 没有数据 --add-drop-table 在每个create语句之前增加一个drop table </p>
+<h4>关于my.cnf</h4>
+<p><strong>Linux查看mysql使用的是哪个my.cnf</strong></p>
+<p>1.查看是否使用了指定目录的my.cnf </p>
+<pre><code>ps aux|grep mysql|grep 'my.cnf'
+</code></pre>
+
+<p>2.查看mysql默认读取my.cnf的目录 </p>
+<pre><code>mysql --help|grep 'my.cnf'  (会按顺序加载)
+</code></pre>
+
+<p>3.启动时没有使用配置文件 </p>
+<p>如果没有设置使用指定目录my.cnf文件及默认读取目录没有my.cnf文件，表示mysql启动时并没有加载配置文件，而是使用默认配置。 </p>
+<p>my.cnf内容详解：<a href="https://www.cnblogs.com/panwenbin-logs/p/8360703.html">https://www.cnblogs.com/panwenbin-logs/p/8360703.html</a></p>
 
 </body>
 </html>
