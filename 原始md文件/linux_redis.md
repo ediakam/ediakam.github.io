@@ -190,11 +190,11 @@ redis hash是一个键值对的集合，是一个string类型的field和value的
 redis的发布与订阅（发布/订阅）是它的一种消息通信模式，一方发送信息，一方接收信息。
 下图是三个客户端同时订阅同一个频道
 
-![](https://i.imgur.com/p3OhNyk.png)
+![](https://ediakam.github.io/image/redis_1.png)
 
 下图是有新信息发送给频道1时，就会将消息发送给订阅它的三个客户端
 
-![](https://i.imgur.com/cy161O7.png)
+![](https://ediakam.github.io/image/redis_2.png)
 
 ### 6、redis的持久化 ###
 
@@ -222,3 +222,7 @@ appendfsync everysec
 ＃每秒写入磁盘一次，效率与效果居中  
 appendfsync no  
 ＃完全依赖操作系统，效率最佳，效果没法保证  
+
+redis常用数据结构：[https://blog.csdn.net/middleware2018/article/details/80355418](https://blog.csdn.net/middleware2018/article/details/80355418)
+
+redis命令参考：[http://doc.redisfans.com/index.html](http://doc.redisfans.com/index.html)

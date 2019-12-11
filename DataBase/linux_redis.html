@@ -762,9 +762,9 @@ flushall    ＃删除所有数据库中的键
 <h3>5、redis的发布与订阅</h3>
 <p>redis的发布与订阅（发布/订阅）是它的一种消息通信模式，一方发送信息，一方接收信息。
 下图是三个客户端同时订阅同一个频道</p>
-<p><img src="https://i.imgur.com/p3OhNyk.png" /></p>
+<p><img src="https://ediakam.github.io/image/redis_1.png" /></p>
 <p>下图是有新信息发送给频道1时，就会将消息发送给订阅它的三个客户端</p>
-<p><img src="https://i.imgur.com/cy161O7.png" /></p>
+<p><img src="https://ediakam.github.io/image/redis_2.png" /></p>
 <h3>6、redis的持久化</h3>
 <p>redis持久有两种方式：快照（快照），仅附加文件（AOF）</p>
 <p><strong>快照（快照）</strong></p>
@@ -785,7 +785,9 @@ appendfsync always<br />
 appendfsync everysec<br />
 ＃每秒写入磁盘一次，效率与效果居中<br />
 appendfsync no<br />
-＃完全依赖操作系统，效率最佳，效果没法保证  </p>
+＃完全依赖操作系统，效率最佳，效果没法保证  </p>
+<p>redis常用数据结构：<a href="https://blog.csdn.net/middleware2018/article/details/80355418">https://blog.csdn.net/middleware2018/article/details/80355418</a></p>
+<p>redis命令参考：<a href="http://doc.redisfans.com/index.html">http://doc.redisfans.com/index.html</a></p>
 
 </body>
 </html>
